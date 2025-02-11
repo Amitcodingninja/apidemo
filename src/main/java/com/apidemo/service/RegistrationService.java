@@ -5,10 +5,12 @@ import com.apidemo.exceptions.ResourceNotFound;
 import com.apidemo.payload.RegistrationDto;
 import com.apidemo.repository.RegistrationRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -81,9 +83,11 @@ public class RegistrationService {
 
     }
 
-    public List<RegistrationDto> getAllRegistrations() {
-        List<Registration> registrations = registrationRepository.findAll();
-        return registrations.stream()
+    public List<RegistrationDto> getAllRegistrations(int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Page<Registration> registrationPage = registrationRepository.findAll(pageable);
+
+        return registrationPage.getContent().stream()
                 .map(registration -> modelMapper.map(registration, RegistrationDto.class))
                 .collect(Collectors.toList());
 

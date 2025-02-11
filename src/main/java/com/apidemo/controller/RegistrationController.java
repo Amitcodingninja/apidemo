@@ -46,15 +46,23 @@ public class RegistrationController {
         return ResponseEntity.ok("Updated Successfully! ID: " + id);
     }
 
+
+    // http://localhost:8080/api/v1/register?pageNo=1&pageSize=3
+    // http://localhost:8080/api/v1/register?pageNo=1&pageSize=3&sortBy=name
     @GetMapping
-    public ResponseEntity<List<RegistrationDto>> getAllRegistrations() {
+    public ResponseEntity<List<RegistrationDto>> getAllRegistrations(
+            @RequestParam(name = "pageNo", required = false, defaultValue = "0") int pageNo,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "3") int pageSize,
+            @RequestParam(name = "sortBy", required = false, defaultValue = "id") String sortBy
+    ) {
         // OLD one
 //        List<Registration> registrations =registrationService.getAllRegistrations();
 //        return registrations;
 
-        List<RegistrationDto> registrations = registrationService.getAllRegistrations();
+        List<RegistrationDto> registrations = registrationService.getAllRegistrations(pageNo, pageSize, sortBy);
         return ResponseEntity.ok(registrations);
     }
+
 
     @GetMapping("/byId")
     public ResponseEntity<Registration> getRegistration(@RequestParam long id) {
