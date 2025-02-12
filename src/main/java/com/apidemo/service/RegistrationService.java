@@ -83,9 +83,17 @@ public class RegistrationService {
 
     }
 
-    public List<RegistrationDto> getAllRegistrations(int pageNo, int pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        Page<Registration> registrationPage = registrationRepository.findAll(pageable);
+    public List<RegistrationDto> getAllRegistrations(int pageNo, int pageSize, String sortBy, String sortDir) {
+        // Logic for categories in asc or desc order
+        Sort sort = sortDir.equals("asc") ? Sort.by(Sort.Order.asc(sortBy)) : Sort.by(Sort.Order.desc(sortBy));
+
+        Pageable page = PageRequest.of(pageNo, pageSize, sort);
+        Page<Registration> registrationPage = registrationRepository.findAll(page);
+
+//        whether you are in the last page of table or first page how many record on per page ,  what the page no
+//
+//        System.out.println(page.getPageNumber());
+//        System.out.println(page.getPageSize());
 
         return registrationPage.getContent().stream()
                 .map(registration -> modelMapper.map(registration, RegistrationDto.class))

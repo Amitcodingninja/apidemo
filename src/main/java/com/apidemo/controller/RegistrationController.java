@@ -1,7 +1,6 @@
 package com.apidemo.controller;
 
 import com.apidemo.entity.Registration;
-import com.apidemo.exceptions.ResourceNotFound;
 import com.apidemo.payload.RegistrationDto;
 import com.apidemo.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +52,14 @@ public class RegistrationController {
     public ResponseEntity<List<RegistrationDto>> getAllRegistrations(
             @RequestParam(name = "pageNo", required = false, defaultValue = "0") int pageNo,
             @RequestParam(name = "pageSize", required = false, defaultValue = "3") int pageSize,
-            @RequestParam(name = "sortBy", required = false, defaultValue = "id") String sortBy
-    ) {
+            @RequestParam(name = "sortBy", required = false, defaultValue = "id") String sortBy,
+            @RequestParam(name = "sortDir", required = false, defaultValue = "asc") String sortByDir,
+            String sortDir) {
         // OLD one
 //        List<Registration> registrations =registrationService.getAllRegistrations();
 //        return registrations;
 
-        List<RegistrationDto> registrations = registrationService.getAllRegistrations(pageNo, pageSize, sortBy);
+        List<RegistrationDto> registrations = registrationService.getAllRegistrations(pageNo, pageSize, sortBy,sortDir);
         return ResponseEntity.ok(registrations);
     }
 
