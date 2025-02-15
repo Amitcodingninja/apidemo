@@ -22,8 +22,10 @@ public class RegistrationService {
     private ModelMapper modelMapper;
 
     public RegistrationService(RegistrationRepository registrationRepository, ModelMapper modelMapper) {
+
         this.registrationRepository = registrationRepository;
         this.modelMapper = modelMapper;
+
     }
 
     public RegistrationDto createRegistration(RegistrationDto registrationDto) {

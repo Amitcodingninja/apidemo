@@ -3,9 +3,11 @@ package com.apidemo.controller;
 import com.apidemo.entity.Registration;
 import com.apidemo.payload.RegistrationDto;
 import com.apidemo.service.RegistrationService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +25,14 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public ResponseEntity<RegistrationDto> createRegistration(@RequestBody RegistrationDto registrationDto) {
+    public ResponseEntity<?> createRegistration(@Valid @RequestBody RegistrationDto registrationDto,
+                                                              BindingResult result) {
+
+        if (result.hasErrors()){
+            return  ResponseEntity.badRequest().body(result.getAllErrors()); // For getting all message in one time
+//            return  ResponseEntity.badRequest().body(result.getFieldError().getDefaultMessage()); // get one by one error
+        }
+
         // Call the service method to save the registration and get the DTO back
         RegistrationDto registration = registrationService.createRegistration(registrationDto);
 
